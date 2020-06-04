@@ -47,4 +47,27 @@ class VideoApiTest extends TestCase
                 '*' => ['id', 'title', 'description', 'uploaded_by', 'created_at', 'updated_at'],
             ]);
     }
+
+    /**
+     * @test
+     */
+    function can_get_video_by_id_from_api()
+    {
+        $user = factory(User::class)->create();
+
+        $video = factory(Video::class)->create([
+            'title' => 'Example title',
+            'description' => 'Example description',
+            'uploaded_by' => $user->id,
+        ]);
+
+        $this->json('GET', '/api/videos/' . $video->id, [])
+            ->assertStatus(200)
+            ->assertJson([
+                'id' => $video->id,
+                'title' => 'Example title', 
+                'description' => 'Example description' ,
+            ])
+            ->assertJsonStructure(['id', 'title', 'description', 'uploaded_by', 'created_at', 'updated_at']);
+    }
 }
