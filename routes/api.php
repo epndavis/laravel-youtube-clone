@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::prefix('/videos')->group(function() {
+    Route::get('/', 'Api\VideoController@index')->name('video.index');
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
