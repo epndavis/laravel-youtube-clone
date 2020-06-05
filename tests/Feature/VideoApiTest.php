@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Video;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class VideoApiTest extends TestCase
@@ -79,13 +80,15 @@ class VideoApiTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $file = UploadedFile::fake()->image('vidoe.png');
+        $videoFile = UploadedFile::fake()->image('video.png');
+
+        Storage::fake(config('media-library.disk_name'));
 
         $this->json('POST', route('video.store'), [
             'title' => 'Example Title',
             'description' => 'Example Description',
             'uploaded_by' => $user->id,
-            'file' => $file,
+            'video' => $videoFile,
         ])
         ->assertStatus(200);
 
@@ -108,7 +111,12 @@ class VideoApiTest extends TestCase
             ->assertJsonValidationErrors([
                 'title',
                 'description',
-                'file',
+                'video',
             ]);
+    }
+
+    public function teardown(): void
+    {
+        Storage::fake('public');
     }
 }
