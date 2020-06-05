@@ -1,5 +1,7 @@
 <?php
 
+// TODO Authorize authenticated users only
+
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,7 +28,7 @@ class StoreVideoRequest extends FormRequest
         return [
             'title' => 'required|string',
             'description' => 'required|string', 
-            'file' => 'required|file',        
+            'video' => 'required|file',     
         ];
     }
 }

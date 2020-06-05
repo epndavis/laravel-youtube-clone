@@ -1,5 +1,7 @@
 <?php
 
+// TODO Set uploaded at to authenticated user in store function
+
 namespace App\Http\Controllers\Api;
 
 use App\Models\Video;
@@ -41,13 +43,11 @@ class VideoController extends Controller
 
         $video->title = $request->input('title');
         $video->description = $request->input('description');
-
-        // TODO Set uploaded at to authenticated user
         $video->uploaded_by = $request->input('uploaded_by');
 
         $video->save();
 
-        $video->addMedia($request->file('file'))->toMediaCollection();
+        $video->addMedia($request->file('video'))->toMediaCollection();
 
         return response()->json($video);
     }
