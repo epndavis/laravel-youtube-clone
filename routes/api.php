@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/videos')->group(function() {
     Route::get('/', 'Api\VideoController@index')->name('video.index');
+    Route::post('/', 'Api\VideoController@store')->name('video.store');
     Route::get('/{id}', 'Api\VideoController@show')->name('video.show');
 });
 
