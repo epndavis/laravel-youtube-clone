@@ -53,29 +53,6 @@ class VideoApiTest extends TestCase
     /**
      * @test
      */
-    function can_get_video_by_id_from_api()
-    {
-        $user = factory(User::class)->create();
-
-        $video = factory(Video::class)->create([
-            'title' => 'Example title',
-            'description' => 'Example description',
-            'uploaded_by' => $user->id,
-        ]);
-
-        $this->json('GET', '/api/videos/' . $video->id, [])
-            ->assertOk()
-            ->assertJson([
-                'id' => $video->id,
-                'title' => 'Example title', 
-                'description' => 'Example description' ,
-            ])
-            ->assertJsonStructure(['id', 'title', 'description', 'uploaded_by', 'created_at', 'updated_at']);
-    }
-
-    /**
-     * @test
-     */
     function can_store_video()
     {
         $user = factory(User::class)->create();
@@ -95,6 +72,39 @@ class VideoApiTest extends TestCase
         $video = Video::with('media')->first();
 
         $this->assertFileExists($video->media->first()->getPath());
+    }
+
+    /**
+     * @test
+     */
+    function can_get_video_by_id_from_api()
+    {
+        factory(User::class)->create();
+
+        $videoFile = UploadedFile::fake()->image('video.png');
+
+        Storage::fake(config('media-library.disk_name'));
+
+        $response = $this->json('POST', route('video.store'), [
+            'title' => 'Example Title',
+            'description' => 'Example Description',
+            'video' => $videoFile,
+        ]);
+
+        $video = json_decode($response->getContent());
+
+        $this->json('GET', '/api/videos/' . $video->id, [])
+            ->assertOk()
+            ->assertJson([
+                'data' => [
+                    'title' => 'Example Title', 
+                    'description' => 'Example Description',
+                    'video' => [
+                        'src' => 'http://youtube-clone.test/storage/1/video.png',
+                    ]
+                ],           
+            ])
+            ->assertJsonStructure(['data' => ['title', 'description', 'video']]);
     }
 
     /**

@@ -1,5 +1,6 @@
 import Home from './components/Home'
 import Upload from './components/Upload'
+import Video from './components/Video'
 
 let routes = [
     {
@@ -11,6 +12,11 @@ let routes = [
         path: '/upload',
         name: 'upload',
         component: Upload
+    },
+    {
+        path: '/video/:id',
+        name: 'video',
+        component: Video
     }
 ]
 
