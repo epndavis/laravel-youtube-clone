@@ -47,7 +47,7 @@ export default {
             formData.append('video', this.video)
 
             axios.post('/api/videos', formData)
-                .then(function(response) {
+                .then((response) => {
                     this.errors = []
                 }).catch((error) => {
                     this.errors = error.response.data.errors
