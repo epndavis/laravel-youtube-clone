@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Video;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\VideoResource;
 use App\Http\Requests\StoreVideoRequest;
 
 class VideoController extends Controller
@@ -28,8 +29,10 @@ class VideoController extends Controller
      */
     public function show($id)
     {
-        return Video::with('media')
-            ->find($id);
+        return new VideoResource(
+            Video::with('media')
+                ->find($id)
+        );
     }
 
     /**
