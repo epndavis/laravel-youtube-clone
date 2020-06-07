@@ -70,8 +70,10 @@ class VideoApiTest extends TestCase
         ->assertStatus(200);
 
         $video = Video::with('media')->first();
+        $videoMedia = $video->media->first();
 
-        $this->assertFileExists($video->media->first()->getPath());
+        $this->assertFileExists($videoMedia->getPath());
+        $this->assertFileExists($videoMedia->getPath('thumb'));
     }
 
     /**
@@ -101,6 +103,7 @@ class VideoApiTest extends TestCase
                     'description' => 'Example Description',
                     'video' => [
                         'src' => 'http://youtube-clone.test/storage/1/video.png',
+                        'thumb' => 'http://youtube-clone.test/storage/1/conversions/video-thumb.jpg',
                     ]
                 ],           
             ])

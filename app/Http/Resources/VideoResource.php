@@ -19,6 +19,7 @@ class VideoResource extends JsonResource
             'description' => $this->description,
             'video' => [
                 'src' => $this->media->first()->getFullUrl(),
+                'thumb' => $this->media->first()->getFullUrl('thumb'),
             ],
         ];
     }
