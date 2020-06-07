@@ -18,7 +18,9 @@ class VideoController extends Controller
      */
     public function index()
     {
-        return Video::all();
+        return VideoResource::collection(
+            Video::with('media')->get()
+        );
     }
 
     /**

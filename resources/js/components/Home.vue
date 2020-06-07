@@ -11,6 +11,8 @@
             >
                 <router-link :to="{ name: 'video', params: { id: video.id } }">
                     <h3>{{ video.title }}</h3>
+
+                    <img :src="video.video.thumb"/>
                 </router-link>
             </div>
         </div>
@@ -29,7 +31,7 @@ export default {
         fetch() {
             return axios.get('/api/videos')
                 .then((response) => {
-                    this.videos = response.data
+                    this.videos = response.data.data
                 })
         },
     },

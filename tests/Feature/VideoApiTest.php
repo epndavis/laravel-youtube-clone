@@ -15,57 +15,17 @@ class VideoApiTest extends TestCase
 
     /**
      * @test
-     * @return void
-     */
-    public function can_get_list_of_videos_from_api()
-    {
-        $user = factory(User::class)->create();
-
-        factory(Video::class)->create([
-            'title' => 'Example title',
-            'description' => 'Example description',
-            'uploaded_by' => $user->id,
-        ]);
-
-        factory(Video::class)->create([
-            'title' => 'Example title 2',
-            'description' => 'Example description 2',
-            'uploaded_by' => $user->id,
-        ]);
-
-        $this->json('GET', '/api/videos', [])
-            ->assertStatus(200)
-            ->assertJson([
-                [ 
-                    'title' => 'Example title', 
-                    'description' => 'Example description' ,
-                ],
-                [ 
-                    'title' => 'Example title 2', 
-                    'description' => 'Example description 2', 
-                ],
-            ])
-            ->assertJsonStructure([
-                '*' => ['id', 'title', 'description', 'uploaded_by', 'created_at', 'updated_at'],
-            ]);
-    }
-
-    /**
-     * @test
      */
     function can_store_video()
     {
-        $user = factory(User::class)->create();
-
-        $videoFile = UploadedFile::fake()->image('video.png');
+        factory(User::class)->create();
 
         Storage::fake(config('media-library.disk_name'));
 
         $this->json('POST', route('video.store'), [
             'title' => 'Example Title',
             'description' => 'Example Description',
-            'uploaded_by' => $user->id,
-            'video' => $videoFile,
+            'video' => UploadedFile::fake()->image('video.png'),
         ])
         ->assertStatus(200);
 
@@ -83,14 +43,12 @@ class VideoApiTest extends TestCase
     {
         factory(User::class)->create();
 
-        $videoFile = UploadedFile::fake()->image('video.png');
-
         Storage::fake(config('media-library.disk_name'));
 
         $response = $this->json('POST', route('video.store'), [
             'title' => 'Example Title',
             'description' => 'Example Description',
-            'video' => $videoFile,
+            'video' => UploadedFile::fake()->image('video.png'),
         ]);
 
         $video = json_decode($response->getContent());
@@ -108,6 +66,47 @@ class VideoApiTest extends TestCase
                 ],           
             ])
             ->assertJsonStructure(['data' => ['title', 'description', 'video']]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function can_get_list_of_videos_from_api()
+    {
+        factory(User::class)->create();
+
+        Storage::fake(config('media-library.disk_name'));
+
+        $this->json('POST', route('video.store'), [
+            'title' => 'Example Title',
+            'description' => 'Example Description',
+            'video' => UploadedFile::fake()->image('video.png'),
+        ]);
+
+        $this->json('POST', route('video.store'), [
+            'title' => 'Example Title 2',
+            'description' => 'Example Description 2',
+            'video' => UploadedFile::fake()->image('video2.png'),
+        ]);
+
+        $this->json('GET', '/api/videos', [])
+            ->assertStatus(200)
+            ->assertJson([
+                'data' => [
+                    [ 
+                        'title' => 'Example Title',
+                    ],
+                    [ 
+                        'title' => 'Example Title 2',
+                    ],
+                ],
+            ])
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => ['id', 'title', 'video' => ['thumb']]
+                ],
+            ]);
     }
 
     /**
