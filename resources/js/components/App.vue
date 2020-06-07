@@ -1,9 +1,7 @@
 <template>
   <div>
-      <div>
-          <router-link :to="{ name: 'home' }">Home</router-link>
-          <router-link :to="{ name: 'upload' }">Upload</router-link>
-      </div>
+      <nav-bar/>
+
       <div>
           <router-view></router-view>
       </div>  
@@ -11,7 +9,11 @@
 </template>
 
 <script>
-export default {
+import NavBar from './NavBar'
 
+export default {
+    components: {
+        'nav-bar': NavBar
+    }
 }
 </script>

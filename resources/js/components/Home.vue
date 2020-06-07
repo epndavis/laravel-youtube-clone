@@ -1,20 +1,14 @@
 <template>
     <div>
-        <h2>
-            Youtube Clone
-        </h2>
+        <div 
+            v-for="(video, index) in videos"
+            :key="index"
+        >
+            <router-link :to="{ name: 'video', params: { id: video.id } }">
+                <h3>{{ video.title }}</h3>
 
-        <div>
-            <div 
-                v-for="(video, index) in videos"
-                :key="index"
-            >
-                <router-link :to="{ name: 'video', params: { id: video.id } }">
-                    <h3>{{ video.title }}</h3>
-
-                    <img :src="video.video.thumb"/>
-                </router-link>
-            </div>
+                <img :src="video.video.thumb"/>
+            </router-link>
         </div>
     </div>
 </template>
