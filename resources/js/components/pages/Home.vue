@@ -1,20 +1,21 @@
 <template>
     <div>
-        <div 
+        <list-item 
             v-for="(video, index) in videos"
             :key="index"
-        >
-            <router-link :to="{ name: 'video', params: { id: video.id } }">
-                <h3>{{ video.title }}</h3>
-
-                <img :src="video.video.thumb"/>
-            </router-link>
-        </div>
+            :video="video"
+        />
     </div>
 </template>
 
 <script>
+import ListItem from '../ListItem'
+
 export default {
+    components: {
+        'list-item': ListItem
+    },
+
     data: () => {
         return {
             videos: []

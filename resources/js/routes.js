@@ -1,6 +1,6 @@
-import Home from './components/Home'
-import Upload from './components/Upload'
-import Video from './components/Video'
+import Home from './components/pages/Home'
+import Upload from './components/pages/Upload'
+import Video from './components/pages/Video'
 
 let routes = [
     {
