@@ -27,7 +27,17 @@ class VideoApiTest extends TestCase
             'description' => 'Example Description',
             'video' => UploadedFile::fake()->image('video.png'),
         ])
-        ->assertStatus(200);
+        ->assertStatus(201)
+        ->assertJson([
+            'data' => [
+                'title' => 'Example Title', 
+                'description' => 'Example Description',
+                'video' => [
+                    'src' => 'http://youtube-clone.test/storage/1/video.png',
+                    'thumb' => 'http://youtube-clone.test/storage/1/conversions/video-thumb.jpg',
+                ]
+            ],           
+        ]);
 
         $video = Video::with('media')->first();
         $videoMedia = $video->media->first();
@@ -51,9 +61,9 @@ class VideoApiTest extends TestCase
             'video' => UploadedFile::fake()->image('video.png'),
         ]);
 
-        $video = json_decode($response->getContent());
+        $data = json_decode($response->getContent());
 
-        $this->json('GET', '/api/videos/' . $video->id, [])
+        $this->json('GET', '/api/videos/' . $data->data->id, [])
             ->assertOk()
             ->assertJson([
                 'data' => [
