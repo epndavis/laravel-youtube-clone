@@ -65,7 +65,13 @@ class VideoApiTest extends TestCase
                     ]
                 ],           
             ])
-            ->assertJsonStructure(['data' => ['title', 'description', 'video']]);
+            ->assertJsonStructure([
+                'data' => [
+                    'title', 
+                    'description', 
+                    'video' => ['src', 'thumb', 'duration']
+                ]
+            ]);
     }
 
     /**
@@ -104,7 +110,12 @@ class VideoApiTest extends TestCase
             ])
             ->assertJsonStructure([
                 'data' => [
-                    '*' => ['id', 'title', 'video' => ['thumb']]
+                    '*' => [
+                        'id',
+                        'title', 
+                        'description', 
+                        'video' => ['src', 'thumb', 'duration']
+                    ]
                 ],
             ]);
     }

@@ -6,7 +6,7 @@
                     <img :src="video.video.thumb"/>
 
                     <div class="video-duration">
-                        <span>1:17</span>
+                        <span>{{ video.video.duration }}</span>
                     </div>
                 </div>  
             </router-link> 
