@@ -1,0 +1,59 @@
+<template>
+    <div class="list-item">
+        <div class="item-thumbnail-wrapper">
+            <router-link :to="videoLink()">
+                <div class="item-thumbnail">
+                    <img :src="video.video.thumb"/>
+
+                    <div class="video-duration">
+                        <span>1:17</span>
+                    </div>
+                </div>  
+            </router-link> 
+        </div>
+
+        <div class="item-details-wrapper">
+            <div class="channel-image">
+                <!-- Logo image here -->
+            </div>
+            <div class="item-details">
+                <router-link :to="videoLink()">
+                    <h2>{{ video.title }}</h2>
+                </router-link> 
+
+                <div>
+                    Channel Name
+                </div>
+                <div>
+                    {{ viewCount() }}
+                </div>
+            </div>
+        </div>   
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        video: {
+            type: Object,
+            required: true
+        }
+    },
+
+    methods: {
+        videoLink() {
+            return { 
+                name: 'video', 
+                params: { 
+                    id: this.video.id 
+                } 
+            }
+        },
+
+        viewCount() {
+            return '117K views'
+        }
+    }
+}
+</script>
