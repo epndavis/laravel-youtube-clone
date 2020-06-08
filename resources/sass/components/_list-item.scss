@@ -1,0 +1,62 @@
+.list-item {
+    padding: 1rem;
+    float: left;
+    width: 100%;
+
+    a {
+        color: inherit;
+    }
+
+    .item-thumbnail-wrapper {
+        margin-bottom: 0.5rem;
+
+        .item-thumbnail {
+            background-color: #000000;
+            position: relative;
+    
+            img {            
+                width: 100%;
+            }
+    
+            .video-duration {
+                background-color: #333333;
+                color: #ffffff;
+                position: absolute;
+                bottom: 5px;
+                right: 5px;
+                font-size: 0.8rem;
+                padding: 0 0.2rem 0 0.2rem;
+                border-radius: 0.2rem;
+            }
+        }
+    } 
+    
+    .channel-image {
+        float: left;
+        padding-right: 0.5rem;
+        width: 20%;
+    }
+
+    .item-details {
+        float: left;
+        width: 80%;
+
+        h2 {
+            font-size: 1.1em;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+    }
+
+    @media screen and (min-width: 925px) {
+        width: 25%;
+    }
+
+    @media screen and (min-width: 625px) and (max-width: 924px) {
+        width: 33.333%;
+    }
+
+    @media screen and (min-width: 425px) and (max-width: 624px) {
+        width: 50%;
+    }
+}
