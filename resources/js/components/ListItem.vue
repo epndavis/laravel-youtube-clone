@@ -6,7 +6,7 @@
                     <img :src="video.video.thumb"/>
 
                     <div class="video-duration">
-                        <span>{{ video.video.duration }}</span>
+                        <span>{{ durationDisplay() }}</span>
                     </div>
                 </div>  
             </router-link> 
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import { formatTime } from '../video/timer'
+
 export default {
     props: {
         video: {
@@ -53,6 +55,10 @@ export default {
 
         viewCount() {
             return '117K views'
+        },
+
+        durationDisplay() {
+            return formatTime(this.video.video.duration);
         }
     }
 }
