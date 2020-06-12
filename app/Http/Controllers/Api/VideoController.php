@@ -4,6 +4,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use FFMpeg\FFProbe;
 use App\Models\Video;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VideoResource;
@@ -52,8 +53,25 @@ class VideoController extends Controller
 
         $video->save();
 
-        $video->addMedia($request->file('video'))->toMediaCollection();
+        $file = $request->file('video');
+        $ffprobe = FFProbe::create([
+            'ffmpeg.binaries'  => config('media-library.ffmpeg_path'),
+            'ffprobe.binaries' => config('media-library.ffprobe_path'),
+        ]);
 
-        return response()->json($video);
+        $duration = $ffprobe->streams($file)
+            ->videos()                   
+            ->first()                  
+            ->get('duration');
+
+        $video->addMedia($file )
+            ->withCustomProperties([
+                'info' => [
+                    'duration' => $duration
+                ],
+            ])
+            ->toMediaCollection();
+
+        return new VideoResource($video);
     }
 }
