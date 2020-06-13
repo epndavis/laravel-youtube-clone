@@ -23,6 +23,7 @@
         "vue-router": "^3.3.2"
     },
     "devDependencies": {
+        "@babel/plugin-transform-modules-commonjs": "^7.10.1",
         "jest": "^26.0.1"
     }
 }
