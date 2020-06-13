@@ -58,7 +58,7 @@ export default {
         },
 
         durationDisplay() {
-            return formatTime(this.video.video.duration);
+           return formatTime(this.video.video.duration)
         }
     }
 }
