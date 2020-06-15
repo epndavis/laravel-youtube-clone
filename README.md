@@ -8,6 +8,7 @@ This is a project built to practice a variety of programming and designs. These 
 5) Programming as a test driven development (TDD)
 6) Buliding custom javascript libraries 
 7) Producing templates and css/sass styles to match design
+8) Understanding wepback, npm and composer to develop mantainable minified code
 
 The end goal is to build a youtube clone/replica (not for commerical use) using the processes listed above. This way I have a design which contains certain problems that will be challenging and best test my skills. 
 
