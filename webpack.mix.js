@@ -1,5 +1,13 @@
 const mix = require('laravel-mix');
 
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            '@services': path.resolve(__dirname, 'resources/js/services'),
+        }
+    }
+})
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management

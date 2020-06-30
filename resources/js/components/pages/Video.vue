@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { get } from '../../services/video'
+import { get } from '@services/video'
 
 export default {
     data: () => {
