@@ -1,4 +1,4 @@
-import { getList } from '../../services/video'
+import { getList } from '@services/video'
 
 export default {
     namespaced: true,
