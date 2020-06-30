@@ -19,6 +19,13 @@ const router = new VueRouter({
 
 //------ Modules ------//
 
+import list from './store/modules/list'
+
+const store = new Vuex.Store({
+    modules: {
+        list: list
+    }
+})
 
 //------ Components ------//
 
@@ -27,5 +34,6 @@ Vue.component('app', require('./components/app').default)
 
 window.app = new Vue({
     el: '#app',  
+    store,
     router  
 })

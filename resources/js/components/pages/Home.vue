@@ -16,23 +16,20 @@ export default {
         'list-item': ListItem
     },
 
-    data: () => {
-        return {
-            videos: []
-        }
-    },
-
     methods: {
         fetch() {
-            return axios.get('/api/videos')
-                .then((response) => {
-                    this.videos = response.data.data
-                })
+            this.$store.dispatch('list/getVideoList')
         },
     },
 
     mounted() {
         this.fetch()
+    },
+
+    computed: {
+        videos() {
+            return this.$store.getters['list/videoList']
+        }
     }
 }
 </script>
