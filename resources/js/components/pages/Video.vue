@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { get } from '../../services/video'
+
 export default {
     data: () => {
         return {
@@ -22,7 +24,7 @@ export default {
 
     methods: {
         fetch() {
-            return axios.get(`/api/videos/${this.$route.params.id}`)
+            return get(this.$route.params.id)
                 .then((response) => {
                     this.video = response.data.data
                 })
