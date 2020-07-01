@@ -1,5 +1,4 @@
 .list-item {
-    padding: 1rem;
     float: left;
     width: 100%;
 
@@ -9,6 +8,8 @@
 
     .item-thumbnail-wrapper {
         margin-bottom: 0.5rem;
+        float: left;
+        width: 100%;
 
         .item-thumbnail {
             background-color: #000000;
@@ -30,33 +31,25 @@
             }
         }
     } 
+
+    .item-details-wrapper {
+        float: left;
     
-    .channel-image {
-        float: left;
-        padding-right: 0.5rem;
-        width: 20%;
-    }
-
-    .item-details {
-        float: left;
-        width: 80%;
-
-        h2 {
-            font-size: 1.1em;
-            font-weight: 800;
-            margin-bottom: 5px;
+        .channel-image {
+            float: left;
+            padding-right: 0.5rem;
+            width: 20%;
         }
-    }
 
-    @media screen and (min-width: 925px) {
-        width: 25%;
-    }
+        .item-details {
+            float: left;
+            width: 80%;
 
-    @media screen and (min-width: 625px) and (max-width: 924px) {
-        width: 33.333%;
-    }
-
-    @media screen and (min-width: 425px) and (max-width: 624px) {
-        width: 50%;
+            h2 {
+                font-size: 1.1em;
+                font-weight: 800;
+                margin-bottom: 5px;
+            }
+        }
     }
 }

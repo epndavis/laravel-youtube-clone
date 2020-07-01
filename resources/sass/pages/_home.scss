@@ -1,0 +1,17 @@
+#home {
+    .list-item {
+        padding: 1rem;
+        
+        @media screen and (min-width: 1025px) {
+            width: 25%;
+        }
+
+        @media screen and (min-width: 800px) and (max-width: 1024px) {
+            width: 33.333%;
+        }
+
+        @media screen and (min-width: 500px) and (max-width: 799px) {
+            width: 50%;
+        }
+    }
+}
