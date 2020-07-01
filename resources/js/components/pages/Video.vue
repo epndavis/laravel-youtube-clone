@@ -1,21 +1,43 @@
 <template>
     <div id="video" v-if="video.title">
-        <h2>{{ video.title }}</h2>
+        <div class="video-container">
+            <player 
+                :src="video.video.src"
+            />   
 
-        <video width="100%" controls>
-            <source :src="video.video.src" type="video/mp4"/>
-        </video>
+            <div class="video-info">
+                <h2 class="video-title">
+                    {{ video.title }}
+                </h2>
+            </div>
 
-        <p>
-            {{ video.description }}
-        </p>
+            <div class="video-description">
+                <p>
+                    {{ video.description }}
+                </p>
+            </div>           
+        </div> 
+        <div class="related-videos">
+            <list-item 
+                v-for="(video, index) in videos"
+                :key="index"
+                :video="video"
+            />
+        </div>
     </div>
 </template>
 
 <script>
 import { get } from '@services/video'
+import Player from '../Player'
+import ListItem from '../ListItem'
 
 export default {
+    components: {
+        player: Player,
+        'list-item': ListItem
+    },
+
     data: () => {
         return {
             video: {}
@@ -24,6 +46,8 @@ export default {
 
     methods: {
         fetch() {
+            this.$store.dispatch('list/getVideoList')
+            
             return get(this.$route.params.id)
                 .then((response) => {
                     this.video = response.data.data
@@ -33,6 +57,12 @@ export default {
 
     mounted() {
         this.fetch()
+    },
+
+    computed: {
+        videos() {
+            return this.$store.getters['list/videoList']
+        }
     }
 }
 </script>

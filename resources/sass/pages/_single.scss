@@ -1,0 +1,45 @@
+#video {
+    padding: 20px 50px 0 50px;
+
+    .video-container {
+        float: left;
+        width: 100%;
+        padding: 0 25px 0 0;
+
+        .video-info {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #dddddd;
+
+            .video-title {
+                margin-top: 15px;
+                font-size: 1.5em;
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+    .related-videos {
+        float: left;
+        width: 100%;
+    }
+
+    .list-item {
+        .item-thumbnail-wrapper {
+            width: 180px;
+        }
+
+        .item-details-wrapper {
+            padding: 0 0 0 10px;
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        .video-container {
+            width: 70%;
+        }   
+        
+        .related-videos {
+            width: 30%;
+        }
+    }
+}
