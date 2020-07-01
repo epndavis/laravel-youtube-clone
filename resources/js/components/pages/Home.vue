@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="home">
         <list-item 
             v-for="(video, index) in videos"
             :key="index"
