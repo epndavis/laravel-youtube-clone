@@ -8,6 +8,10 @@ function pad(number, size) {
 }
 
 export function formatTime(durationInSeconds) {
+    if (typeof durationInSeconds == 'undefined' || durationInSeconds == null) {
+        durationInSeconds = 0
+    }
+
     let durationInMinutes = Math.floor(durationInSeconds) / 60
     let per = durationInMinutes % 1;
 
