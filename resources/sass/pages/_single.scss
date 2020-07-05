@@ -1,7 +1,7 @@
 #video {
     padding: 20px 50px 0 50px;
 
-    .video-container {
+    .video-info-container {
         float: left;
         width: 100%;
         padding: 0 25px 0 0;
@@ -34,7 +34,7 @@
     }
 
     @media screen and (min-width: 1024px) {
-        .video-container {
+        .video-info-container {
             width: 70%;
         }   
         

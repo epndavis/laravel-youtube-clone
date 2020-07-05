@@ -2,7 +2,8 @@
 @import './base/reset';
 
 // Components
-@import './components/list-item';
+@import './components/list-item',
+        './components/player';
 
 // Layouts
 @import './layouts/navigation';
@@ -14,3 +15,6 @@
 // Themes
 @import './themes/light',
         './themes/dark';
+
+// Vendors 
+@import './vendor/font-awesome';
