@@ -131,17 +131,7 @@
 
             volumeChange(context) {
                 this.volumeDragging = true
-                let volume = this.mousePosition(context.element, context.event)
-
-                if (volume > 1) {
-                    volume = 1
-                }
-
-                if (volume < 0) {
-                    volume = 0
-                }
-
-                this.volume = volume
+                this.volume = this.mousePosition(context.element, context.event)
             },
 
             applyListeners() {
@@ -179,6 +169,11 @@
             this.video.play().catch(function(er) {
                 console.log(er, "Cannot play video right now!")
             }) 
+
+            let oldVolume = localStorage.getItem('volume');
+            if (oldVolume !== 'null') {
+                this.volume = oldVolume
+            }
 
             this.progressListElement = this.$refs["progress-list"]
             this.volumeElement = this.$refs["volume-slider"]
@@ -240,7 +235,16 @@
                     return this.video.volume
                 },
 
-                set(val) {
+                set(val) {              
+                    if (val > 1) {
+                        val = 1
+                    }
+
+                    if (val < 0) {
+                        val = 0
+                    }
+
+                    localStorage.setItem('volume', val);
                     this.video.$el.volume = val
                 }
             }
