@@ -1,0 +1,147 @@
+.video-player {
+    position: relative;
+    background-color: #000000;
+    color: #ffffff;
+    overflow: hidden;
+
+    .video-container {
+        width: 100%;
+
+        video {
+            display: block;
+        }
+    }
+
+    &:hover, &.player-paused, &.player-dragging {
+        .player-gradient {
+            display: block;
+        }
+
+        .player-controls {
+            display: block;
+        }
+    }
+
+    &.player-dragging {
+        .player-controls {
+            .progress-container {
+                .progress-bar-list {
+                    transform: none;
+
+                    .progression-bar-indicator {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+
+    .player-gradient {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 50%;
+        background: rgb(2,0,36);
+        background: linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(0,0,0,1) 0%, rgba(255,255,255,0) 30%);
+        display: none;
+    }
+
+    .player-controls {
+        position: absolute;       
+        bottom: 0;
+        left: 10px;
+        right: 10px;
+        height: 36px;
+        line-height: 36px;
+        display: none;
+
+        .progress-container {
+            position: absolute;
+            top: -15px;
+            left: 0;
+            right: 0;
+            cursor: pointer;
+            padding: 10px 0 5px 0;
+
+            &:hover {
+                .progress-bar-list {
+                    transform: none;
+
+                    .progression-bar-indicator {
+                        display: block;
+                    }
+                }
+            }
+
+            .progress-bar-list {
+                height: 5px;
+                transform: scaleY(0.6);
+                transition: transform 0.1s;
+                position: relative;
+                background-color: rgba(grey, 0.5);
+
+                .progress-bar {
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    left: 0;
+                }
+    
+                .buffer-bar {
+                    background-color: rgba(#c9c9c9, 0.5);
+                    transform-origin: 0 0;
+                    z-index: 1;
+                }
+    
+                .seeker-bar {
+                    background-color: rgba(#e6e6e6, 0.5);
+                    transform-origin: 0 0;
+                    z-index: 1;
+                }
+    
+                .progression-bar {
+                    background-color: red;
+                    transform-origin: 0 0;
+                    z-index: 2;
+                }
+    
+                .progression-bar-indicator {
+                    width: 12px; 
+                    height: 12px;
+                    margin-left: -6px;
+                    background-color: red;
+                    z-index: 2;
+                    border-radius: 12px;
+                    display: none;
+                    position: absolute;
+                    left: 0;
+                    top: -3px;
+                }
+            }
+        }
+
+        .controls-action {
+            cursor: pointer;
+            display: block;
+            width: 36px;
+            float: left;
+            text-align: center;
+            height: 100%;
+        }
+
+        .player-time-display {
+            padding: 0 10px 0 10px;
+            float: left;
+            height: 100%;
+        }
+
+        .primary-controls {
+            float: left;
+        }
+
+        .secondary-controls {
+            float: right;
+        }
+    }
+}

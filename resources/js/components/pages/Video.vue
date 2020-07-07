@@ -1,6 +1,6 @@
 <template>
     <div id="video" v-if="video.title">
-        <div class="video-container">
+        <div class="video-info-container">
             <player 
                 :src="video.video.src"
             />   
