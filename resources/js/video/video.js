@@ -76,6 +76,10 @@ class Video {
     jumpTo(time) {
         this.$el.currentTime = time
 
+        if (time < this.duration) {
+            this.ended = false
+        }
+
         return this
     }
 }
