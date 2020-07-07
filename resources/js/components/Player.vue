@@ -1,5 +1,5 @@
 <template>
-    <div class="video-player" :class="{ 'player-paused': paused, 'player-dragging': dragging }">
+    <div class="video-player" :class="{ 'player-paused': paused, 'player-dragging': dragging, 'player-hover': volumeDragging }">
         <div class="video-container" @click="togglePlay()">
             <video id="video_player" :src="src" width="100%"></video>  
         </div> 
@@ -26,14 +26,26 @@
                         <i class="fas fa-redo-alt fa-flip-horizontal"></i>
                     </span>
                 </a>
-                <a class="controls-action" @click="toggleMute()">
-                    <span v-show="!muted">
-                        <i class="fas fa-volume-up"></i>
-                    </span>
-                    <span v-show="muted">
-                        <i class="fas fa-volume-mute"></i>
-                    </span>
-                </a>
+                <span class="volume-controls" :class="{ 'volume-dragging': volumeDragging }">
+                    <a class="controls-action" @click="toggleMute()">
+                        <span v-show="!muted && volume > 0.4">
+                            <i class="fas fa-volume-up"></i>
+                        </span>
+                        <span v-show="!muted && volume > 0 && volume <= 0.4">
+                            <i class="fas fa-volume-down"></i>
+                        </span>
+                        <span v-show="muted || volume == 0">
+                            <i class="fas fa-volume-mute"></i>
+                        </span>
+                    </a>
+
+                    <div class="volume-scaler" ref="volume-slider">
+                        <div class="volume-bar">
+                            <progress-bar class="progression-bar" :progress="volume"/>
+                            <div class="progression-bar-indicator" :style="{ left: `${volume * 100}%` }"></div>
+                        </div>
+                    </div>
+                </span>
                 <div class="player-time-display">
                     <span>{{ currentTime }} / {{ videoDuration() }}</span>
                 </div>  
@@ -70,8 +82,10 @@
             return {
                 video: {},
                 progressListElement: null,
+                volumeElement: null,
                 seeking: 0,
-                dragging: false
+                dragging: false,
+                volumeDragging: false
             }
         },
 
@@ -94,22 +108,38 @@
 
             applyListeners() {
                 this.progressListElement.addEventListener('mousemove', (e) => {
-                    this.seeking = this.progressListMousePosition(e)
+                    this.seeking = this.mousePosition(this.progressListElement, e)
                 })
 
                 document.addEventListener('mousemove', (e) => {
                     if (this.dragging) {
                         e.preventDefault();
-                        this.currentTime = this.progressListMousePosition(e) * this.video.duration
+                        this.currentTime = this.mousePosition(this.progressListElement, e) * this.video.duration
+                    }
+
+                    if (this.volumeDragging) {
+                        e.preventDefault();
+                        let volume = this.mousePosition(this.volumeElement, e)
+
+                        if (volume > 1) {
+                            volume = 1
+                        }
+
+                        if (volume < 0) {
+                            volume = 0
+                        }
+
+                        this.volume = volume
                     }
                 })
 
                 document.addEventListener('mouseup', (e) => {
                     this.dragging = false
+                    this.volumeDragging = false
                 })
 
                 this.progressListElement.addEventListener('mouseover', (e) => {
-                    this.seeking = this.progressListMousePosition(e)
+                    this.seeking = this.mousePosition(this.progressListElement, e)
                 })
 
                 this.progressListElement.addEventListener('mouseout', (e) => {
@@ -118,14 +148,29 @@
 
                 this.progressListElement.addEventListener('mousedown', (e) => {
                     this.dragging = true
-                    this.currentTime =  this.progressListMousePosition(e) * this.video.duration
+                    this.currentTime =  this.mousePosition(this.progressListElement, e) * this.video.duration
+                })
+
+                this.volumeElement.addEventListener('mousedown', (e) => {
+                    this.volumeDragging = true
+                    let volume = this.mousePosition(this.volumeElement, e)
+
+                    if (volume > 1) {
+                        volume = 1
+                    }
+
+                    if (volume < 0) {
+                        volume = 0
+                    }
+
+                    this.volume = volume
                 })
             },
 
-            progressListMousePosition(e) {
-                let rect = this.progressListElement.getBoundingClientRect();
+            mousePosition(el, e) {
+                let rect = el.getBoundingClientRect();
 
-                return (e.screenX - rect.left) / this.progressListElement.offsetWidth;
+                return (e.screenX - rect.left) / el.offsetWidth;
             }
         },
 
@@ -137,6 +182,7 @@
             }) 
 
             this.progressListElement = this.$refs["progress-list"]
+            this.volumeElement = this.$refs["volume-slider"]
 
             this.applyListeners()
         },
@@ -187,6 +233,16 @@
 
                 set(bool) {
                     this.video.$el.muted = bool
+                }
+            },
+
+            volume: {
+                get() {
+                    return this.video.volume
+                },
+
+                set(val) {
+                    this.video.$el.volume = val
                 }
             }
         },

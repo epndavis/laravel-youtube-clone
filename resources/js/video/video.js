@@ -7,6 +7,7 @@ class Video {
         this.ended = false
         this.buffered = 0
         this.muted = this.$el.muted
+        this.volume = this.$el.volume
 
         let self = this
 
@@ -36,6 +37,7 @@ class Video {
 
         this.$el.onvolumechange = function() {
             self.muted = this.muted
+            self.volume = this.volume
         }
     }
 
