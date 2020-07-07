@@ -6,14 +6,20 @@
 
         <div class="player-gradient"></div>
         <div class="player-controls">
-            <div class="progress-container" ref="progress-list">
-                <div class="progress-bar-list">
-                    <progress-bar class="buffer-bar" :progress="buffered"/>
-                    <progress-bar class="seeker-bar" :progress="seeking"/>
-                    <progress-bar class="progression-bar" :progress="progress"/>
-                    <div class="progression-bar-indicator" :style="{ left: `${progress * 100}%` }"></div>
-                </div>              
-            </div>
+            <slider-bar-list
+                class="progress-container"
+                ref="video-slider"
+                @mousemove="setSeeking"
+                @mouseover="setSeeking"
+                @mouseout="endSeeking"
+                @mousedown="draggingTime"
+            >
+                <progress-bar class="buffer-bar" :progress="buffered"/>
+                <progress-bar class="seeker-bar" :progress="seeking"/>
+                <progress-bar class="progression-bar" :progress="progress"/>
+                <div class="progression-bar-indicator" :style="{ left: `${progress * 100}%` }"></div>
+            </slider-bar-list>
+
             <div class="primary-controls">
                 <a class="controls-action" @click="togglePlay()">
                     <span v-show="paused && !ended">
@@ -39,12 +45,14 @@
                         </span>
                     </a>
 
-                    <div class="volume-scaler" ref="volume-slider">
-                        <div class="volume-bar">
-                            <progress-bar class="progression-bar" :progress="volume"/>
-                            <div class="progression-bar-indicator" :style="{ left: `${volume * 100}%` }"></div>
-                        </div>
-                    </div>
+                    <slider-bar-list 
+                        class="volume-scaler"
+                        ref="volume-slider"
+                        @mousedown="volumeChange"
+                    >
+                        <progress-bar class="progression-bar" :progress="volume"/>
+                        <div class="progression-bar-indicator" :style="{ left: `${volume * 100}%` }"></div>
+                    </slider-bar-list>
                 </span>
                 <div class="player-time-display">
                     <span>{{ currentTime }} / {{ videoDuration() }}</span>
@@ -63,11 +71,13 @@
 
 <script>
     import Video from '../video/video'
+    import SliderBarList from './Player/SliderBarList'
     import ProgressBar from './Player/ProgressBar'
     import { formatTime } from '../video/timer'
 
     export default {
         components: {
+            'slider-bar-list': SliderBarList,
             'progress-bar': ProgressBar
         },
 
@@ -106,30 +116,48 @@
                 this.muted = !this.muted
             },
 
-            applyListeners() {
-                this.progressListElement.addEventListener('mousemove', (e) => {
-                    this.seeking = this.mousePosition(this.progressListElement, e)
-                })
+            setSeeking(context) {
+                this.seeking = this.mousePosition(context.element, context.event)
+            },
 
+            endSeeking() {
+                this.seeking = 0
+            },
+
+            draggingTime(context) {
+                this.dragging = true
+                this.currentTime =  this.mousePosition(context.element, context.event) * this.video.duration
+            },
+
+            volumeChange(context) {
+                this.volumeDragging = true
+                let volume = this.mousePosition(context.element, context.event)
+
+                if (volume > 1) {
+                    volume = 1
+                }
+
+                if (volume < 0) {
+                    volume = 0
+                }
+
+                this.volume = volume
+            },
+
+            applyListeners() {
                 document.addEventListener('mousemove', (e) => {
                     if (this.dragging) {
                         e.preventDefault();
-                        this.currentTime = this.mousePosition(this.progressListElement, e) * this.video.duration
+                        this.currentTime = this.mousePosition(this.$refs['video-slider'].$el, e) * this.video.duration
                     }
 
                     if (this.volumeDragging) {
                         e.preventDefault();
-                        let volume = this.mousePosition(this.volumeElement, e)
 
-                        if (volume > 1) {
-                            volume = 1
-                        }
-
-                        if (volume < 0) {
-                            volume = 0
-                        }
-
-                        this.volume = volume
+                        this.volumeChange({
+                            'element': this.$refs['volume-slider'].$el,
+                            'event': e
+                        })
                     }
                 })
 
@@ -137,39 +165,10 @@
                     this.dragging = false
                     this.volumeDragging = false
                 })
-
-                this.progressListElement.addEventListener('mouseover', (e) => {
-                    this.seeking = this.mousePosition(this.progressListElement, e)
-                })
-
-                this.progressListElement.addEventListener('mouseout', (e) => {
-                    this.seeking = 0
-                })
-
-                this.progressListElement.addEventListener('mousedown', (e) => {
-                    this.dragging = true
-                    this.currentTime =  this.mousePosition(this.progressListElement, e) * this.video.duration
-                })
-
-                this.volumeElement.addEventListener('mousedown', (e) => {
-                    this.volumeDragging = true
-                    let volume = this.mousePosition(this.volumeElement, e)
-
-                    if (volume > 1) {
-                        volume = 1
-                    }
-
-                    if (volume < 0) {
-                        volume = 0
-                    }
-
-                    this.volume = volume
-                })
             },
 
             mousePosition(el, e) {
                 let rect = el.getBoundingClientRect();
-
                 return (e.screenX - rect.left) / el.offsetWidth;
             }
         },
