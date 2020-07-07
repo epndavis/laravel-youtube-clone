@@ -12,7 +12,7 @@
         }
     }
 
-    &:hover, &.player-paused, &.player-dragging {
+    &:hover, &.player-paused, &.player-dragging, &.player-hover {
         .player-gradient {
             display: block;
         }
@@ -65,7 +65,7 @@
             padding: 10px 0 5px 0;
 
             &:hover {
-                .progress-bar-list {
+                .slider-bar-list {
                     transform: none;
 
                     .progression-bar-indicator {
@@ -74,7 +74,7 @@
                 }
             }
 
-            .progress-bar-list {
+            .slider-bar-list {
                 height: 5px;
                 transform: scaleY(0.6);
                 transition: transform 0.1s;
@@ -129,6 +129,60 @@
             text-align: center;
             height: 100%;
         }
+
+        .volume-controls {
+            float: left;
+
+            &:hover, &.volume-dragging {
+                .volume-scaler {
+                    width: 70px;
+
+                    .slider-bar-list {
+                        .progression-bar-indicator {
+                            display: block;
+                        }
+                    }
+                }
+            }
+
+            .volume-scaler {
+                float: left;
+                height: 35px;
+                line-height: 35px;
+                width: 0px;
+                display: flex;
+                align-items: center;
+                transition: 300ms;
+                cursor: pointer;
+
+                .slider-bar-list {
+                    width: 100%;
+                    height: 3px;
+                    margin: 0 5px 0 5px;
+                    background-color: rgba(grey, 0.5);
+                    position: relative;
+
+                    .progress-bar {
+                        height: 3px;
+                        width: 100%;
+                        background-color: rgb(255, 255, 255);
+                        transform-origin: 0px 0px;
+                    }
+
+                    .progression-bar-indicator {
+                        width: 12px;
+                        height: 12px;
+                        margin-left: -6px;
+                        background-color: #fff;
+                        z-index: 2;
+                        border-radius: 12px;
+                        position: absolute;
+                        top: -4px;
+                        display: none;
+                    }
+                }
+            }
+        }  
 
         .player-time-display {
             padding: 0 10px 0 10px;
