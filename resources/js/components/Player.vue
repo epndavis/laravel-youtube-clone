@@ -91,8 +91,6 @@
         data() {
             return {
                 video: {},
-                progressListElement: null,
-                volumeElement: null,
                 seeking: 0,
                 dragging: false,
                 volumeDragging: false
@@ -174,9 +172,6 @@
             if (oldVolume !== 'null') {
                 this.volume = oldVolume
             }
-
-            this.progressListElement = this.$refs["progress-list"]
-            this.volumeElement = this.$refs["volume-slider"]
 
             this.applyListeners()
         },
