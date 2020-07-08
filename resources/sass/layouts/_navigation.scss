@@ -2,3 +2,12 @@
     padding: 1rem;
     width: 100%;
 }
+
+#app.theater-mode {
+    .video-page {
+        .nav-bar {
+            background-color: $primary-dark;
+            color: #ffffff; 
+        }
+    }
+}

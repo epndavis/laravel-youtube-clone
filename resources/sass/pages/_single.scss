@@ -1,10 +1,33 @@
 #video {
-    padding: 20px 50px 0 50px;
+    padding: 20px 0 0 0;
+
+    .video-wrapper {
+        padding: 0px 50px 0 50px;
+    }
+
+    &.theater-mode {
+        padding-top: 0;
+
+        .video-theater-container {
+            display: block;
+        }
+
+        .related-videos {
+            padding-top: 15px;
+        }
+    }
+
+    .video-theater-container {
+        width: 100%;
+        background-color: #000000;
+        height: 80vh;
+        display: none;
+    }
 
     .video-info-container {
         float: left;
         width: 100%;
-        padding: 0 25px 0 0;
+        padding: 0 25px 0 0px;
 
         .video-info {
             margin-bottom: 15px;

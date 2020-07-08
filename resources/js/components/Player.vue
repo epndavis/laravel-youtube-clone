@@ -59,6 +59,13 @@
                 </div>  
             </div>
             <div class="secondary-controls">
+                <a class="controls-action" @click="toggleTheaterMode()">
+                    <span>
+                        <svg width="18" height="10" :class="{ 'expand': !theaterMode }">
+                            <rect x="0" y="0" width="18" height="10" style="stroke:white;stroke-width:3;" /> 
+                        </svg>
+                    </span>
+                </a>
                 <a class="controls-action" @click="video.fullscreen()">
                     <span>
                         <i class="fas fa-expand"></i>
@@ -93,7 +100,8 @@
                 video: {},
                 seeking: 0,
                 dragging: false,
-                volumeDragging: false
+                volumeDragging: false,
+                theaterModeBool: false
             }
         },
 
@@ -104,6 +112,18 @@
                 }
 
                 return this.video.pause()
+            },
+
+            toggleTheaterMode() {
+                this.theaterMode = !this.theaterMode
+            },
+
+            enterTheaterMode() {
+                this.theaterMode = true
+            },
+
+            exitTheaterMode() {
+                this.theaterMode = false
             },
 
             videoDuration() {
@@ -171,6 +191,11 @@
             let oldVolume = localStorage.getItem('volume');
             if (oldVolume !== 'null') {
                 this.volume = oldVolume
+            }
+
+            let oldTheater = localStorage.getItem('theaterMode');
+            if (oldTheater !== 'null') {
+                this.theaterMode = Boolean(oldTheater == 'true')
             }
 
             this.applyListeners()
@@ -241,6 +266,18 @@
 
                     localStorage.setItem('volume', val);
                     this.video.$el.volume = val
+                }
+            },
+
+            theaterMode: {
+                get() {
+                    return this.theaterModeBool
+                },
+
+                set(val) {
+                    localStorage.setItem('theaterMode', val);
+                    this.$emit('theaterMode', val)
+                    this.theaterModeBool = val
                 }
             }
         },
