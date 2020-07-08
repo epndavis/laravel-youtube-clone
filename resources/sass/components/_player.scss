@@ -132,6 +132,10 @@
             text-align: center;
             height: 100%;
             line-height: 35px;
+
+            .control-icon-fill {
+                fill: #ffffff;
+            }
             
             svg {
                 transform-origin: center;
