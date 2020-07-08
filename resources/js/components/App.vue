@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="`${$route.name}-page`">
       <nav-bar/>
 
       <div>
