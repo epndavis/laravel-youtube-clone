@@ -22,26 +22,23 @@
 
             <div class="primary-controls">
                 <a class="controls-action" @click="togglePlay()">
-                    <span v-show="paused && !ended">
-                        <i class="fas fa-play"></i>
-                    </span>
-                    <span v-show="!paused && !ended">
-                        <i class="fas fa-pause"></i>
+                    <span v-show="!ended">
+                        <svg class="control-icon-fill" height="100%" width="100%" viewBox="0 0 36 36">
+                            <path :d="playSVG()" />
+                        </svg>
                     </span>
                     <span v-show="ended">
-                        <i class="fas fa-redo-alt fa-flip-horizontal"></i>
+                        <svg class="control-icon-fill" width="100%" height="100%" viewBox="-6 -6 36 36">
+                            <path d="M12 5.016q3.328 0 5.672 2.344t2.344 5.625q0 3.328-2.367 5.672t-5.648 2.344-5.648-2.344-2.367-5.672h2.016q0 2.484 1.758 4.242t4.242 1.758 4.242-1.758 1.758-4.242-1.758-4.242-4.242-1.758v4.031l-5.016-5.016 5.016-5.016v4.031z"/>
+                        </svg>
                     </span>
                 </a>
                 <span class="volume-controls" :class="{ 'volume-dragging': volumeDragging }">
                     <a class="controls-action" @click="toggleMute()">
-                        <span v-show="!muted && volume > 0.4">
-                            <i class="fas fa-volume-up"></i>
-                        </span>
-                        <span v-show="!muted && volume > 0 && volume <= 0.4">
-                            <i class="fas fa-volume-down"></i>
-                        </span>
-                        <span v-show="muted || volume == 0">
-                            <i class="fas fa-volume-mute"></i>
+                        <span>
+                            <svg class="control-icon-fill" width="100%" height="100%" viewBox="-11.5 -11.5 56 56">
+                                <path :d="volumeSVG()"/>
+                            </svg>
                         </span>
                     </a>
 
@@ -68,7 +65,9 @@
                 </a>
                 <a class="controls-action" @click="video.fullscreen()">
                     <span>
-                        <i class="fas fa-expand"></i>
+                        <svg class="control-icon-fill" height="100%" width="100%" viewBox="0 0 36 36">
+                            <path d="M10 10 L16 10 L16 12 L12 12 L12 16 L10 16z M26 10 L26 16 L24 16 L24 12 L20 12 L20 10z M10 26 L10 20 L12 20 L12 24 L16 24 L16 26z M26 26 L26 20 L24 20 L24 24 L20 24 L20 26z" />
+                        </svg>
                     </span>
                 </a>
             </div>
@@ -178,6 +177,26 @@
             mousePosition(el, e) {
                 let rect = el.getBoundingClientRect();
                 return (e.screenX - rect.left) / el.offsetWidth;
+            },
+
+            playSVG() {
+                if (this.paused) {
+                    return 'M11 10 L25 18 L11 26z'
+                }
+
+                return 'M11 10 L16 10 L16 26 L11 26z M20 10 L25 10 L25 26 L20 26z'
+            },
+
+            volumeSVG() {
+                if (this.muted || this.volume <= 0) {
+                    return 'M30 19.348v2.652h-2.652l-3.348-3.348-3.348 3.348h-2.652v-2.652l3.348-3.348-3.348-3.348v-2.652h2.652l3.348 3.348 3.348-3.348h2.652v2.652l-3.348 3.348 3.348 3.348z M13 30c-0.26 0-0.516-0.102-0.707-0.293l-7.707-7.707h-3.586c-0.552 0-1-0.448-1-1v-10c0-0.552 0.448-1 1-1h3.586l7.707-7.707c0.286-0.286 0.716-0.372 1.090-0.217s0.617 0.519 0.617 0.924v26c0 0.404-0.244 0.769-0.617 0.924-0.124 0.051-0.254 0.076-0.383 0.076z'
+                }
+
+                if (this.volume <= 0.5) {
+                    return 'M13 30c-0.26 0-0.516-0.102-0.707-0.293l-7.707-7.707h-3.586c-0.552 0-1-0.448-1-1v-10c0-0.552 0.448-1 1-1h3.586l7.707-7.707c0.286-0.286 0.716-0.372 1.090-0.217s0.617 0.519 0.617 0.924v26c0 0.404-0.244 0.769-0.617 0.924-0.124 0.051-0.254 0.076-0.383 0.076z M17.157 23.157c-0.384 0-0.768-0.146-1.061-0.439-0.586-0.586-0.586-1.535 0-2.121 2.534-2.534 2.534-6.658 0-9.192-0.586-0.586-0.586-1.536 0-2.121s1.535-0.586 2.121 0c3.704 3.704 3.704 9.731 0 13.435-0.293 0.293-0.677 0.439-1.061 0.439z'
+                }
+
+                return 'M13 30c-0.26 0-0.516-0.102-0.707-0.293l-7.707-7.707h-3.586c-0.552 0-1-0.448-1-1v-10c0-0.552 0.448-1 1-1h3.586l7.707-7.707c0.286-0.286 0.716-0.372 1.090-0.217s0.617 0.519 0.617 0.924v26c0 0.404-0.244 0.769-0.617 0.924-0.124 0.051-0.254 0.076-0.383 0.076z M22.485 25.985c-0.384 0-0.768-0.146-1.061-0.439-0.586-0.586-0.586-1.535 0-2.121 4.094-4.094 4.094-10.755 0-14.849-0.586-0.586-0.586-1.536 0-2.121s1.536-0.586 2.121 0c2.55 2.55 3.954 5.94 3.954 9.546s-1.404 6.996-3.954 9.546c-0.293 0.293-0.677 0.439-1.061 0.439v0zM17.157 23.157c-0.384 0-0.768-0.146-1.061-0.439-0.586-0.586-0.586-1.535 0-2.121 2.534-2.534 2.534-6.658 0-9.192-0.586-0.586-0.586-1.536 0-2.121s1.535-0.586 2.121 0c3.704 3.704 3.704 9.731 0 13.435-0.293 0.293-0.677 0.439-1.061 0.439z'
             }
         },
 
