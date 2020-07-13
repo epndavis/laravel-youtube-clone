@@ -9,7 +9,8 @@
         './components/player';
 
 // Layouts
-@import './layouts/navigation';
+@import './layouts/fullscreen', 
+        './layouts/navigation';
 
 // Pages
 @import './pages/home',
