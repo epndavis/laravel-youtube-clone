@@ -1,7 +1,7 @@
 <template>
     <div class="video-player" :class="{ 'player-paused': paused, 'player-dragging': dragging, 'player-hover': volumeDragging }">
         <div class="video-container" @click="togglePlay()">
-            <video id="video_player" :src="src" width="100%"></video>  
+            <video id="video_player" :src="src" width="100%" controlsList="nodownload"></video>  
         </div> 
 
         <div class="player-gradient"></div>
@@ -56,17 +56,17 @@
                 </div>  
             </div>
             <div class="secondary-controls">
-                <a class="controls-action" @click="toggleTheaterMode()">
+                <a v-show="!fullscreen" class="controls-action" @click="toggleTheaterMode()">
                     <span>
                         <svg width="18" height="10" :class="{ 'expand': !theaterMode }">
                             <rect x="0" y="0" width="18" height="10" style="stroke:white;stroke-width:3;" /> 
                         </svg>
                     </span>
                 </a>
-                <a class="controls-action" @click="video.fullscreen()">
+                <a class="controls-action" @click="toggleFullscreen()">
                     <span>
                         <svg class="control-icon-fill" height="100%" width="100%" viewBox="0 0 36 36">
-                            <path d="M10 10 L16 10 L16 12 L12 12 L12 16 L10 16z M26 10 L26 16 L24 16 L24 12 L20 12 L20 10z M10 26 L10 20 L12 20 L12 24 L16 24 L16 26z M26 26 L26 20 L24 20 L24 24 L20 24 L20 26z" />
+                            <path :d="fullscreenSVG()" />
                         </svg>
                     </span>
                 </a>
@@ -80,6 +80,8 @@
     import SliderBarList from './Player/SliderBarList'
     import ProgressBar from './Player/ProgressBar'
     import { formatTime } from '../video/timer'
+    import { playIcons, volumeIcons, fullscreenIcons } from '../player/icons/all.icon'
+    import * as fullscreenCtrl from '../player/controls/fullscreen.control'
 
     export default {
         components: {
@@ -100,7 +102,8 @@
                 seeking: 0,
                 dragging: false,
                 volumeDragging: false,
-                theaterModeBool: false
+                theaterModeBool: false,
+                fullscreen: false,
             }
         },
 
@@ -171,6 +174,14 @@
                 document.addEventListener('mouseup', (e) => {
                     this.dragging = false
                     this.volumeDragging = false
+                })   
+                
+                fullscreenCtrl.onFullscreenChange(() => {
+                    if (!document.fullscreenElement) {
+                        this.fullscreen = false
+                    } else {
+                        window.scrollTo(0, 0)
+                    }     
                 })
             },
 
@@ -181,22 +192,50 @@
 
             playSVG() {
                 if (this.paused) {
-                    return 'M11 10 L25 18 L11 26z'
+                    return playIcons.play
                 }
 
-                return 'M11 10 L16 10 L16 26 L11 26z M20 10 L25 10 L25 26 L20 26z'
+                return playIcons.pause
             },
 
             volumeSVG() {
                 if (this.muted || this.volume <= 0) {
-                    return 'M30 19.348v2.652h-2.652l-3.348-3.348-3.348 3.348h-2.652v-2.652l3.348-3.348-3.348-3.348v-2.652h2.652l3.348 3.348 3.348-3.348h2.652v2.652l-3.348 3.348 3.348 3.348z M13 30c-0.26 0-0.516-0.102-0.707-0.293l-7.707-7.707h-3.586c-0.552 0-1-0.448-1-1v-10c0-0.552 0.448-1 1-1h3.586l7.707-7.707c0.286-0.286 0.716-0.372 1.090-0.217s0.617 0.519 0.617 0.924v26c0 0.404-0.244 0.769-0.617 0.924-0.124 0.051-0.254 0.076-0.383 0.076z'
+                    return volumeIcons.mute
                 }
 
                 if (this.volume <= 0.5) {
-                    return 'M13 30c-0.26 0-0.516-0.102-0.707-0.293l-7.707-7.707h-3.586c-0.552 0-1-0.448-1-1v-10c0-0.552 0.448-1 1-1h3.586l7.707-7.707c0.286-0.286 0.716-0.372 1.090-0.217s0.617 0.519 0.617 0.924v26c0 0.404-0.244 0.769-0.617 0.924-0.124 0.051-0.254 0.076-0.383 0.076z M17.157 23.157c-0.384 0-0.768-0.146-1.061-0.439-0.586-0.586-0.586-1.535 0-2.121 2.534-2.534 2.534-6.658 0-9.192-0.586-0.586-0.586-1.536 0-2.121s1.535-0.586 2.121 0c3.704 3.704 3.704 9.731 0 13.435-0.293 0.293-0.677 0.439-1.061 0.439z'
+                    return volumeIcons.low
                 }
 
-                return 'M13 30c-0.26 0-0.516-0.102-0.707-0.293l-7.707-7.707h-3.586c-0.552 0-1-0.448-1-1v-10c0-0.552 0.448-1 1-1h3.586l7.707-7.707c0.286-0.286 0.716-0.372 1.090-0.217s0.617 0.519 0.617 0.924v26c0 0.404-0.244 0.769-0.617 0.924-0.124 0.051-0.254 0.076-0.383 0.076z M22.485 25.985c-0.384 0-0.768-0.146-1.061-0.439-0.586-0.586-0.586-1.535 0-2.121 4.094-4.094 4.094-10.755 0-14.849-0.586-0.586-0.586-1.536 0-2.121s1.536-0.586 2.121 0c2.55 2.55 3.954 5.94 3.954 9.546s-1.404 6.996-3.954 9.546c-0.293 0.293-0.677 0.439-1.061 0.439v0zM17.157 23.157c-0.384 0-0.768-0.146-1.061-0.439-0.586-0.586-0.586-1.535 0-2.121 2.534-2.534 2.534-6.658 0-9.192-0.586-0.586-0.586-1.536 0-2.121s1.535-0.586 2.121 0c3.704 3.704 3.704 9.731 0 13.435-0.293 0.293-0.677 0.439-1.061 0.439z'
+                return volumeIcons.high
+            },
+
+            fullscreenSVG() {
+                if (this.fullscreen) {
+                    return fullscreenIcons.on
+                }
+
+                return fullscreenIcons.off
+            },
+
+            toggleFullscreen() {
+                this.fullscreen = !this.fullscreen
+            }
+        },
+
+        watch: {
+            fullscreen(setfull) {
+                if (setfull) {
+                    this.enterTheaterMode();
+
+                    fullscreenCtrl.enterFullscreen(document.documentElement);
+
+                    document.body.classList.add('fullscreen-mode')
+                } else {
+                    document.body.classList.remove('fullscreen-mode')
+
+                    fullscreenCtrl.exitFullscreen();
+                }
             }
         },
 
