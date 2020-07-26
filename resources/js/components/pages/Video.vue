@@ -8,6 +8,7 @@
                     <player 
                         id="player"
                         :src="video.video.src"
+                        :time="getTime()"
                         @theaterMode="theaterMode"
                     /> 
                 </div>    
@@ -83,6 +84,10 @@ export default {
             
             this.inTheaterMode = mode
             document.getElementById(playerContainer).appendChild(document.getElementById('player'))
+        },
+
+        getTime() {
+            return 
         }
     },
 

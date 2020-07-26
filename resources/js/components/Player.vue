@@ -93,6 +93,11 @@
             src: {
                 type: String,
                 required: true,
+            },
+
+            time: {
+                type: Number,
+                default: 0,
             }
         },
 
@@ -241,6 +246,8 @@
 
         mounted() {
             this.video = new Video(document.getElementById('video_player'))
+
+            this.video.jumpTo(this.time)
 
             this.video.play().catch(function(er) {
                 console.log(er, "Cannot play video right now!")
