@@ -20,7 +20,9 @@ class VideoController extends Controller
     public function index()
     {
         return VideoResource::collection(
-            Video::with('media')->get()
+            Video::has('media')
+                ->with('media')
+                ->get()
         );
     }
 
@@ -34,7 +36,8 @@ class VideoController extends Controller
     {
         return new VideoResource(
             Video::with('media')
-                ->find($id)
+                ->where('uuid', $id)
+                ->first()
         );
     }
 
