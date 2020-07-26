@@ -21,7 +21,7 @@ class VideoResource extends JsonResource
         $video = $this->media->first();
 
         return [
-            'id' => $this->id,
+            'id' => $this->uuid,
             'title' => $this->title,
             'description' => $this->description,
             'video' => [

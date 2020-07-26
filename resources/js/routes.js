@@ -14,8 +14,8 @@ let routes = [
         component: Upload
     },
     {
-        path: '/video/:id',
-        name: 'video',
+        path: '/watch',
+        name: 'watch',
         component: Video
     }
 ]

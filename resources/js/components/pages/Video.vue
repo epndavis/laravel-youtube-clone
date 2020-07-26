@@ -53,11 +53,19 @@ export default {
         }
     },
 
+    created() {
+        if (!this.$route.query.v) {
+            return this.$router.push({ name: 'home' })
+        }
+
+        this.fetch()
+    },
+
     methods: {
         fetch() {
             this.$store.dispatch('list/getVideoList')
             
-            return get(this.$route.params.id)
+            return get(this.$route.query.v)
                 .then((response) => {
                     this.video = response.data.data
                 })
@@ -76,10 +84,6 @@ export default {
             this.inTheaterMode = mode
             document.getElementById(playerContainer).appendChild(document.getElementById('player'))
         }
-    },
-
-    mounted() {
-        this.fetch()
     },
 
     computed: {

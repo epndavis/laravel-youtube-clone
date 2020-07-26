@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -10,6 +11,21 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Video extends Model implements HasMedia
 {
     use InteractsWithMedia;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($video) {
+            $uuid = (string) Str::uuid();
+            
+            while (self::where('uuid', $uuid)->exists()) {
+                $uuid = (string) Str::uuid();
+            }
+
+            $video->uuid = $uuid;
+        });
+    }
 
     public function registerMediaConversions(Media $media = null): void
     {

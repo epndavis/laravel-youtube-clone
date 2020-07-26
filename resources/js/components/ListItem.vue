@@ -46,9 +46,9 @@ export default {
     methods: {
         videoLink() {
             return { 
-                name: 'video', 
-                params: { 
-                    id: this.video.id 
+                name: 'watch', 
+                query: { 
+                    v: this.video.id 
                 } 
             }
         },
