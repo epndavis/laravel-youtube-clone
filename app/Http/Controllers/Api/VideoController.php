@@ -9,12 +9,7 @@ use App\Models\Video;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VideoResource;
 use App\Http\Requests\StoreVideoRequest;
-use FFMpeg\Coordinate\Dimension;
-use FFMpeg\Coordinate\TimeCode;
-use FFMpeg\Driver\FFMpegDriver;
-use FFMpeg\FFMpeg;
-use RuntimeException;
-use Spatie\MediaLibrary\MediaCollections\Filesystem;
+use App\Services\VideoService;
 
 class VideoController extends Controller
 {
@@ -80,7 +75,9 @@ class VideoController extends Controller
                     'duration' => $duration
                 ],
             ])
-            ->toMediaCollection();
+            ->toMediaCollection('videos');
+
+        (new VideoService)->generateGif($video->getFirstMedia('videos'));
 
         return new VideoResource($video);
     }

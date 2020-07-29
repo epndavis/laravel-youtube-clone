@@ -5,8 +5,8 @@
 
 namespace App\Http\Resources;
 
-use FFMpeg\FFProbe;
 use Illuminate\Support\Str;
+use App\Services\VideoService;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Spatie\MediaLibrary\MediaCollections\Filesystem;
 
@@ -29,7 +29,7 @@ class VideoResource extends JsonResource
             'video' => [
                 'src' => $video->getFullUrl(),
                 'thumb' => $video->getFullUrl('thumb'),
-                'gif' => asset('/storage/' . app(Filesystem::class)->getConversionDirectory($video) . Str::slug($video->name) . '-gif.gif'),
+                'gif' => (new VideoService)->getGifUrl($video),
                 'duration' => $video->getCustomProperty('info')['duration'],
             ],
         ];
