@@ -39,9 +39,6 @@ class Video extends Model implements HasMedia
               ->width(368)
               ->height(232)
               ->extractVideoFrameAtSecond(1);
-
-        $this->addMediaConversion('gif')
-            ->performOnCollections('gifs');
     }
 
     /**
