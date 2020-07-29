@@ -5,6 +5,8 @@
                 <div class="item-thumbnail">
                     <img :src="video.video.thumb"/>
 
+                    <img :src="video.video.gif"/>
+
                     <div class="video-duration">
                         <span>{{ durationDisplay() }}</span>
                     </div>
