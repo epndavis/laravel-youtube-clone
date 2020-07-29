@@ -9,6 +9,7 @@ use App\Models\Video;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VideoResource;
 use App\Http\Requests\StoreVideoRequest;
+use App\Services\VideoService;
 
 class VideoController extends Controller
 {
@@ -62,18 +63,21 @@ class VideoController extends Controller
             'ffprobe.binaries' => config('media-library.ffprobe_path'),
         ]);
 
-        $duration = $ffprobe->streams($file)
+        $videoFile = $ffprobe->streams($file)
             ->videos()                   
-            ->first()                  
-            ->get('duration');
+            ->first(); 
 
-        $video->addMedia($file )
+        $duration = $videoFile->get('duration');
+
+        $video->addMedia($file)
             ->withCustomProperties([
                 'info' => [
                     'duration' => $duration
                 ],
             ])
-            ->toMediaCollection();
+            ->toMediaCollection('videos');
+
+        (new VideoService)->generateGif($video->getFirstMedia('videos'));
 
         return new VideoResource($video);
     }

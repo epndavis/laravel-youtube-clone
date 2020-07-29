@@ -18,6 +18,20 @@
             img {            
                 width: 100%;
             }
+
+            .item-thumbnail-preview {
+
+                &.display-preview {
+                    opacity: 1;
+                }
+
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: transparent;
+                opacity: 0;
+                transition: opacity 0.5s;
+            }
     
             .video-duration {
                 background-color: #333333;
