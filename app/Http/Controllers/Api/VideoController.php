@@ -6,10 +6,11 @@ namespace App\Http\Controllers\Api;
 
 use FFMpeg\FFProbe;
 use App\Models\Video;
+use Illuminate\Http\Request;
+use App\Services\VideoService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\VideoResource;
 use App\Http\Requests\StoreVideoRequest;
-use App\Services\VideoService;
 
 class VideoController extends Controller
 {
@@ -18,12 +19,17 @@ class VideoController extends Controller
      *
      * @return Illuminate\Database\Eloquent\Collection
      */
-    public function index()
+    public function index(Request $request)
     {
+        $videoQuery = Video::has('media')
+            ->with('media');
+
+        if ($request->input('x')) {
+            $videoQuery->where('uuid', '!=', $request->input('x'));
+        }
+
         return VideoResource::collection(
-            Video::has('media')
-                ->with('media')
-                ->get()
+            $videoQuery->get()
         );
     }
 

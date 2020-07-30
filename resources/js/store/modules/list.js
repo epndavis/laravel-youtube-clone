@@ -3,10 +3,10 @@ import { getList } from '@services/video'
 export default {
     namespaced: true,
 
-    state: {
+    state: () => ({
         lastUpdate: null,
         videos: []
-    },
+    }),
 
     getters: {
         getLastUpdate: (state) => {
@@ -31,11 +31,11 @@ export default {
     },
 
     actions: {
-        getVideoList ({ getters, commit }) {
+        getVideoList ({ getters, commit }, payload = {}) {
             let currentDate = new Date()
 
-            if (getters.getLastUpdate === null || getters.getLastUpdate < (currentDate.getTime() - 30000)) {
-                return getList().then((response) => {
+            if (payload.forceUpdate || (getters.getLastUpdate === null || getters.getLastUpdate < (currentDate.getTime() - 30000))) {
+                return getList(payload).then((response) => {
                     commit('setVideoList', response.data.data)
                     commit('updateLastTime')
                 });

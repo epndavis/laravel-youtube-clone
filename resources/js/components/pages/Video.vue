@@ -25,7 +25,7 @@
                     </p>
                 </div>           
             </div> 
-            <div class="related-videos">
+            <div v-show="status" class="related-videos">
                 <list-item 
                     v-for="(video, index) in videos"
                     :key="index"
@@ -40,6 +40,7 @@
 import { get } from '@services/video'
 import Player from '../Player'
 import ListItem from '../ListItem'
+import list from '../../store/modules/list'
 
 export default {
     components: {
@@ -50,7 +51,8 @@ export default {
     data: () => {
         return {
             video: {},
-            inTheaterMode: false
+            inTheaterMode: false,
+            status: false
         }
     },
 
@@ -59,12 +61,21 @@ export default {
             return this.$router.push({ name: 'home' })
         }
 
+        if (!this.$store.hasModule('recommendList')) {
+            this.$store.registerModule('recommendList', list)
+        }
+
         this.fetch()
     },
 
     methods: {
         fetch() {
-            this.$store.dispatch('list/getVideoList')
+            this.$store.dispatch('recommendList/getVideoList', {
+                forceUpdate: true,
+                ignore: this.$route.query.v
+            }).then(response => {
+                this.status = true
+            })
             
             return get(this.$route.query.v)
                 .then((response) => {
@@ -93,7 +104,7 @@ export default {
 
     computed: {
         videos() {
-            return this.$store.getters['list/videoList']
+            return this.$store.getters['recommendList/videoList']
         }
     }
 }
