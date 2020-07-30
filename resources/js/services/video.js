@@ -3,8 +3,16 @@ export {
     get
 }
 
-function getList() {
-    return axios.get('/api/videos')
+function getList(params) {
+    let config = {};
+
+    if (typeof params !== 'undefined') {
+        config.params = {
+            x: params.ignore
+        }
+    }
+
+    return axios.get('/api/videos', config)
 }  
 
 function get(id) {
