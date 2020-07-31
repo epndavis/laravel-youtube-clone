@@ -48,6 +48,7 @@
     import VolumeAction from './Player/Controls/Actions/Volume'
     import TheaterAction from './Player/Controls/Actions/Theater'
     import FullscreenAction from './Player/Controls/Actions/Fullscreen'
+    import { mousePosition } from '../mouse'
 
     export default {
         components: {
@@ -112,7 +113,7 @@
             },
 
             setSeeking(context) {
-                this.seeking = this.mousePosition(context.element, context.event)
+                this.seeking = mousePosition(context.element, context.event)
             },
 
             endSeeking() {
@@ -121,7 +122,7 @@
 
             draggingTime(context) {
                 this.dragging = true
-                this.currentTime =  this.mousePosition(context.element, context.event) * this.video.duration
+                this.currentTime =  mousePosition(context.element, context.event) * this.video.duration
             },
 
             volumeChange(volume) {
@@ -132,7 +133,7 @@
                 document.addEventListener('mousemove', (e) => {
                     if (this.dragging) {
                         e.preventDefault();
-                        this.currentTime = this.mousePosition(this.$refs['video-slider'].$el, e) * this.video.duration
+                        this.currentTime = mousePosition(this.$refs['video-slider'].$el, e) * this.video.duration
                     }
                 })
 
@@ -147,11 +148,6 @@
                         window.scrollTo(0, 0)
                     }     
                 })
-            },
-
-            mousePosition(el, e) {
-                let rect = el.getBoundingClientRect();
-                return (e.screenX - rect.left) / el.offsetWidth;
             },
 
             toggleFullscreen() {

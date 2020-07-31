@@ -23,6 +23,7 @@
 import volumeIcons from '@player/icons/volume.icon';
 import SliderBarList from '../../../Player/SliderBarList'
 import ProgressBar from '../../../Player/ProgressBar'
+import { mousePosition } from '../../../../mouse'
 
 export default {
     name: 'VolumeAction',
@@ -77,12 +78,7 @@ export default {
 
         volumeChange(context) {
             this.volumeDragging = true
-            this.adjustVolume(this.mousePosition(context.element, context.event))
-        },
-
-        mousePosition(el, e) {
-            let rect = el.getBoundingClientRect();
-            return (e.screenX - rect.left) / el.offsetWidth;
+            this.adjustVolume(mousePosition(context.element, context.event))
         },
 
         applyListeners() {
