@@ -4,6 +4,7 @@ mix.webpackConfig({
     resolve: {
         alias: {
             '@services': path.resolve(__dirname, 'resources/js/services'),
+            '@player': path.resolve(__dirname, 'resources/js/player'),
         }
     }
 })

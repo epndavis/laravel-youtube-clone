@@ -5,7 +5,7 @@
         </div> 
 
         <div class="player-gradient"></div>
-        <div class="player-controls">
+        <div v-if="video.$el" class="player-controls">
             <slider-bar-list
                 class="progress-container"
                 ref="video-slider"
@@ -21,57 +21,20 @@
             </slider-bar-list>
 
             <div class="primary-controls">
-                <a class="controls-action" @click="togglePlay()">
-                    <span v-show="!ended">
-                        <svg class="control-icon-fill" height="100%" width="100%" viewBox="0 0 36 36">
-                            <path :d="playSVG()" />
-                        </svg>
-                    </span>
-                    <span v-show="ended">
-                        <svg class="control-icon-fill" width="100%" height="100%" viewBox="-6 -6 36 36">
-                            <path d="M12 5.016q3.328 0 5.672 2.344t2.344 5.625q0 3.328-2.367 5.672t-5.648 2.344-5.648-2.344-2.367-5.672h2.016q0 2.484 1.758 4.242t4.242 1.758 4.242-1.758 1.758-4.242-1.758-4.242-4.242-1.758v4.031l-5.016-5.016 5.016-5.016v4.031z"/>
-                        </svg>
-                    </span>
-                </a>
-                <span class="volume-controls" :class="{ 'volume-dragging': volumeDragging }">
-                    <a class="controls-action" @click="toggleMute()">
-                        <span>
-                            <svg class="control-icon-fill" width="100%" height="100%" viewBox="-11.5 -11.5 56 56">
-                                <path :d="volumeSVG()"/>
-                            </svg>
-                        </span>
-                    </a>
+                <play-pause-action :paused="paused" :ended="ended" @action="togglePlay()" />
 
-                    <slider-bar-list 
-                        class="volume-scaler"
-                        ref="volume-slider"
-                        @mousedown="volumeChange"
-                    >
-                        <progress-bar class="progression-bar" :progress="volume"/>
-                        <div class="progression-bar-indicator" :style="{ left: `${volume * 100}%` }"></div>
-                    </slider-bar-list>
-                </span>
+                <volume-action :volume="volume" :muted="muted" @action="toggleMute()" @setVolume="volumeChange"/>
+
                 <div class="player-time-display">
                     <span>{{ currentTime }} / {{ videoDuration() }}</span>
                 </div>  
             </div>
-            <div class="secondary-controls">
-                <a v-show="!fullscreen" class="controls-action" @click="toggleTheaterMode()">
-                    <span>
-                        <svg width="18" height="10" :class="{ 'expand': !theaterMode }">
-                            <rect x="0" y="0" width="18" height="10" style="stroke:white;stroke-width:3;" /> 
-                        </svg>
-                    </span>
-                </a>
-                <a class="controls-action" @click="toggleFullscreen()">
-                    <span>
-                        <svg class="control-icon-fill" height="100%" width="100%" viewBox="0 0 36 36">
-                            <path :d="fullscreenSVG()" />
-                        </svg>
-                    </span>
-                </a>
+            <div class="secondary-controls">   
+                <theater-action :theater-mode="theaterMode" :display="!fullscreen" @action="toggleTheaterMode()" />  
+
+                <fullscreen-action :fullscreen="fullscreen" @action="toggleFullscreen()" />
             </div>
-        </div>    
+        </div>  
     </div>
 </template>
 
@@ -80,13 +43,20 @@
     import SliderBarList from './Player/SliderBarList'
     import ProgressBar from './Player/ProgressBar'
     import { formatTime } from '../video/timer'
-    import { playIcons, volumeIcons, fullscreenIcons } from '../player/icons/all.icon'
-    import * as fullscreenCtrl from '../player/controls/fullscreen.control'
+    import * as fullscreenCtrl from '@player/controls/fullscreen.control'
+    import PlayPauseAction from './Player/Controls/Actions/PlayPause'
+    import VolumeAction from './Player/Controls/Actions/Volume'
+    import TheaterAction from './Player/Controls/Actions/Theater'
+    import FullscreenAction from './Player/Controls/Actions/Fullscreen'
 
     export default {
         components: {
             'slider-bar-list': SliderBarList,
-            'progress-bar': ProgressBar
+            'progress-bar': ProgressBar,
+            'play-pause-action': PlayPauseAction,
+            'volume-action': VolumeAction,
+            'fullscreen-action': FullscreenAction,
+            'theater-action': TheaterAction
         },
 
         props: {
@@ -154,9 +124,8 @@
                 this.currentTime =  this.mousePosition(context.element, context.event) * this.video.duration
             },
 
-            volumeChange(context) {
-                this.volumeDragging = true
-                this.volume = this.mousePosition(context.element, context.event)
+            volumeChange(volume) {
+                this.volume = volume
             },
 
             applyListeners() {
@@ -165,20 +134,10 @@
                         e.preventDefault();
                         this.currentTime = this.mousePosition(this.$refs['video-slider'].$el, e) * this.video.duration
                     }
-
-                    if (this.volumeDragging) {
-                        e.preventDefault();
-
-                        this.volumeChange({
-                            'element': this.$refs['volume-slider'].$el,
-                            'event': e
-                        })
-                    }
                 })
 
                 document.addEventListener('mouseup', (e) => {
                     this.dragging = false
-                    this.volumeDragging = false
                 })   
                 
                 fullscreenCtrl.onFullscreenChange(() => {
@@ -193,34 +152,6 @@
             mousePosition(el, e) {
                 let rect = el.getBoundingClientRect();
                 return (e.screenX - rect.left) / el.offsetWidth;
-            },
-
-            playSVG() {
-                if (this.paused) {
-                    return playIcons.play
-                }
-
-                return playIcons.pause
-            },
-
-            volumeSVG() {
-                if (this.muted || this.volume <= 0) {
-                    return volumeIcons.mute
-                }
-
-                if (this.volume <= 0.5) {
-                    return volumeIcons.low
-                }
-
-                return volumeIcons.high
-            },
-
-            fullscreenSVG() {
-                if (this.fullscreen) {
-                    return fullscreenIcons.on
-                }
-
-                return fullscreenIcons.off
             },
 
             toggleFullscreen() {
