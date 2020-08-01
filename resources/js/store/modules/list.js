@@ -25,6 +25,10 @@ export default {
             state.lastUpdate = currentDate.getTime()
         },
 
+        clearLastUpdate (state) {
+            state.lastUpdate = null
+        },
+
         setVideoList (state, videos) {
             state.videos = videos
         }
@@ -34,7 +38,7 @@ export default {
         getVideoList ({ getters, commit }, payload = {}) {
             let currentDate = new Date()
 
-            if (payload.forceUpdate || (getters.getLastUpdate === null || getters.getLastUpdate < (currentDate.getTime() - 30000))) {
+            if (payload.forceUpdate || payload.query || (getters.getLastUpdate === null || getters.getLastUpdate < (currentDate.getTime() - 30000))) {
                 return getList(payload).then((response) => {
                     commit('setVideoList', response.data.data)
                     commit('updateLastTime')

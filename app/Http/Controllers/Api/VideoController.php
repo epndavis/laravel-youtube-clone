@@ -28,6 +28,10 @@ class VideoController extends Controller
             $videoQuery->where('uuid', '!=', $request->input('x'));
         }
 
+        if ($request->input('q')) {
+            $videoQuery->where('title', 'LIKE', '%' . $request->input('q') . '%');
+        }
+
         return VideoResource::collection(
             $videoQuery->get()
         );
