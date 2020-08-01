@@ -1,17 +1,18 @@
 <template>
     <nav class="nav-bar">
         <div class="left-nav">
-            <router-link :to="{ name: 'home' }">
-                <h2>
-                    Youtube Clone
+            <a @click="goHome()">
+                <logo />
+                <h2> 
+                    Yt Clone
                 </h2>
-            </router-link>
+            </a>
         </div>
 
         <div class="center-nav">
-            <form class="search-container">
+            <form class="search-container" @submit="search">
                 <div class="search-bar">
-                    <input name="q" type="text" placeholder="Search" />
+                    <input v-model="query" name="q" type="text" placeholder="Search" />
                 </div>
                 <button class="search-button">
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="24" height="24" viewBox="0 0 1024 1024">
@@ -38,7 +39,40 @@
 </template>
 
 <script>
+import Logo from './Logo'
+
 export default {
-    name: 'Nav-Bar'
+    name: 'Nav-Bar',
+
+    components: {
+        Logo
+    },
+
+    data() {
+        return {
+            query: this.$route.query.q
+        }
+    },
+
+    methods: {
+        goHome() {
+            this.$store.commit('list/clearLastUpdate')
+
+            this.$router.push({ name: 'home' })
+        },
+
+        search(e) {
+            e.preventDefault();
+
+            if (this.query) {
+                this.$router.push({ 
+                    name: 'home',
+                    query: {
+                        q: this.query
+                    }
+                })
+            }
+        }
+    },
 }
 </script>

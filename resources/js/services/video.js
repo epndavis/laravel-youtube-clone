@@ -8,7 +8,8 @@ function getList(params) {
 
     if (typeof params !== 'undefined') {
         config.params = {
-            x: params.ignore
+            x: params.ignore,
+            q: params.query
         }
     }
 
