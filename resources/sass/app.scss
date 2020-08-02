@@ -1,11 +1,14 @@
 // Abstracts
-@import './abstracts/variables';
+@import './abstracts/variables',
+        './abstracts/functions';
 
 // Base
-@import './base/reset';
+@import './base/reset',
+        './base/typography';
 
 // Components
 @import './components/list-item',
+        './components/channel-icon',
         './components/player';
 
 // Layouts
@@ -17,7 +20,8 @@
         './pages/single';
 
 // Themes
-@import './themes/light',
+@import './themes/default',
+        './themes/light',
         './themes/dark';
 
 // Vendors 

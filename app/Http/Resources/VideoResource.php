@@ -26,6 +26,8 @@ class VideoResource extends JsonResource
             'id' => $this->uuid,
             'title' => $this->title,
             'description' => $this->description,
+            'viewCount' => $this->shortViewCount(mt_rand(100000, 2000000)),
+            'uploadedWhen' => $this->created_at->diffForHumans(),
             'video' => [
                 'src' => $video->getFullUrl(),
                 'thumb' => $video->getFullUrl('thumb'),

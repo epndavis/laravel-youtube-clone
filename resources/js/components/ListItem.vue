@@ -16,7 +16,7 @@
 
         <div class="item-details-wrapper">
             <div class="channel-image">
-                <!-- Logo image here -->
+                <channel-icon />
             </div>
             <div class="item-details">
                 <router-link :to="videoLink()">
@@ -27,7 +27,7 @@
                     Channel Name
                 </div>
                 <div>
-                    {{ viewCount() }}
+                    {{ viewCount() }} <span>•</span> {{ uploadedWhen() }}
                 </div>
             </div>
         </div>   
@@ -67,7 +67,11 @@ export default {
         },
 
         viewCount() {
-            return '117K views'
+            return `${this.video.viewCount} views`
+        },
+
+        uploadedWhen() {
+            return this.video.uploadedWhen
         },
 
         durationDisplay() {

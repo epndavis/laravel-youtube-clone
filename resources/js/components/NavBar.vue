@@ -31,9 +31,7 @@
                     </svg>
                 </router-link>
             </div>
-            <div class="account-nav">
-                E
-            </div>
+            <channel-icon />
         </div>      
     </nav>
 </template>
