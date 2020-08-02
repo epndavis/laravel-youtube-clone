@@ -80,6 +80,7 @@ export default {
             return get(this.$route.query.v)
                 .then((response) => {
                     this.video = response.data.data
+                    document.title = this.video.title
                 })
         },
 
@@ -98,7 +99,11 @@ export default {
         },
 
         getTime() {
-            return 
+            if (this.$route.query.t) {
+                return this.$route.query.t
+            }
+            
+            return 0
         }
     },
 
