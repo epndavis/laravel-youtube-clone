@@ -31,13 +31,16 @@
                     </svg>
                 </router-link>
             </div>
-            <channel-icon />
+            <div @click="logout" class="account">
+                <channel-icon />
+            </div>
         </div>      
     </nav>
 </template>
 
 <script>
 import Logo from './Logo'
+import { logout } from '@services/auth.service'
 
 export default {
     name: 'Nav-Bar',
@@ -70,6 +73,13 @@ export default {
                     }
                 })
             }
+        },
+
+        logout() {
+            logout().then(response => {
+                localStorage.removeItem('isLoggedIn')
+                this.goHome()
+            })
         }
     },
 }

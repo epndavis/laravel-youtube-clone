@@ -16,10 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('/videos')->group(function() {
     Route::get('/', 'Api\VideoController@index')->name('video.index');
-    Route::post('/', 'Api\VideoController@store')->name('video.store');
     Route::get('/{id}', 'Api\VideoController@show')->name('video.show');
+
+    Route::middleware('auth:sanctum')->group(function() {
+        Route::post('/', 'Api\VideoController@store')->name('video.store');
+    });
 });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
