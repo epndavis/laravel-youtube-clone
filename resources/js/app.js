@@ -20,12 +20,18 @@ const router = new VueRouter({
 //------ Modules ------//
 
 import list from './store/modules/list'
+import user from './store/modules/user.module'
 
 const store = new Vuex.Store({
     modules: {
-        list: list
+        list: list,
+        user: user
     }
 })
+
+if (store.getters['user/isLoggedIn']) {
+    store.dispatch('user/getUser')
+}
 
 //------ Components ------//
 

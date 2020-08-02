@@ -46,12 +46,14 @@ export default {
             formData.append('description', this.description)
             formData.append('video', this.video)
 
-            axios.post('/api/videos', formData)
-                .then((response) => {
-                    this.errors = []
-                }).catch((error) => {
-                    this.errors = error.response.data.errors
-                })
+            axios.get('/sanctum/csrf-cookie').then(cookieResponse => {
+                axios.post('/api/videos', formData)
+                    .then((response) => {
+                        this.errors = []
+                    }).catch((error) => {
+                        this.errors = error.response.data.errors
+                    })
+            })
         }
     }
 }

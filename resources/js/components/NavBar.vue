@@ -10,7 +10,7 @@
         </div>
 
         <div class="center-nav">
-            <form class="search-container" @submit="search">
+            <form class="search-container" @submit.prevent="search">
                 <div class="search-bar">
                     <input v-model="query" name="q" type="text" placeholder="Search" />
                 </div>
@@ -31,7 +31,14 @@
                     </svg>
                 </router-link>
             </div>
-            <channel-icon />
+            <div class="account">
+                <div v-if="isLoggedIn" @click="logout">
+                    <channel-icon :name="username" />
+                </div>
+                <router-link v-else :to="{ name: 'login' }">
+                    Sign In
+                </router-link>
+            </div>
         </div>      
     </nav>
 </template>
@@ -59,9 +66,7 @@ export default {
             this.$router.push({ name: 'home' })
         },
 
-        search(e) {
-            e.preventDefault();
-
+        search() {
             if (this.query) {
                 this.$router.push({ 
                     name: 'home',
@@ -70,7 +75,23 @@ export default {
                     }
                 })
             }
+        },
+
+        logout() {
+            this.$store.dispatch('user/logout').then(response => {
+                this.goHome()
+            })
         }
     },
+
+    computed: {
+        isLoggedIn() {
+            return this.$store.getters['user/isLoggedIn']
+        },
+
+        username() {
+            return this.$store.getters['user/getUser'].name
+        }
+    }
 }
 </script>

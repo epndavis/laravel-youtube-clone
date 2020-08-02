@@ -50,10 +50,6 @@
                     padding-left: 0.5rem;
                     font-size: 1em;
                     border-radius: 0;
-
-                    &:focus {
-                        outline: none;
-                    }
                 }
             }
 
@@ -64,10 +60,6 @@
                 width: 70px;
                 cursor: pointer;
                 line-height: 0;
-
-                &:focus {
-                    outline: none;
-                }
 
                 &:hover {
                     background-color: #ddd;
@@ -90,6 +82,12 @@
         .upload {
             float: left;
             padding: 0 1.5rem 0 1.5rem;
+        }
+
+        .account {
+            float: left;
+            height: 32px;
+            line-height: 32px;
         }
     }
 }

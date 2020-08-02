@@ -1,9 +1,22 @@
 <template>
     <div class="channel-icon">
-        E
+        {{ username }}
     </div>
 </template>
 
 <script>
-export default {}
+export default {
+    props: {
+        name: {
+            type: String,
+            default: 'Elliot'
+        }
+    },
+
+    data() {
+        return {
+            username: this.name[0]
+        }
+    }
+}
 </script>
