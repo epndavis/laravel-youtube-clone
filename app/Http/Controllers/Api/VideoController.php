@@ -63,7 +63,7 @@ class VideoController extends Controller
 
         $video->title = $request->input('title');
         $video->description = $request->input('description');
-        $video->uploaded_by = 1;
+        $video->uploaded_by = auth()->user()->id;
 
         $video->save();
 

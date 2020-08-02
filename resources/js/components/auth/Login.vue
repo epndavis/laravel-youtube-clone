@@ -41,8 +41,6 @@
 </template>
 
 <script>
-import { login } from '@services/auth.service'
-
 export default {
     data() {
         return {
@@ -55,13 +53,11 @@ export default {
     methods: {
         login() {
             axios.get('/sanctum/csrf-cookie').then(response => {
-                login({
+                this.$store.dispatch('user/login', {
                     email: this.email,
                     password: this.password,
                     remember: this.remember
                 }).then(loginResponse => {
-                    localStorage.setItem('isLoggedIn', 'true')
-
                     let next = { name: 'home' }
 
                     if (this.$route.query.redirect) {
