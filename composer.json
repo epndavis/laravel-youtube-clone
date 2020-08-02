@@ -16,6 +16,7 @@
         "laravel/framework": "^7.0",
         "laravel/sanctum": "^2.4",
         "laravel/tinker": "^2.0",
+        "laravel/ui": "^2.1",
         "php-ffmpeg/php-ffmpeg": "^0.16.0",
         "spatie/laravel-medialibrary": "^8.0.0"
     },

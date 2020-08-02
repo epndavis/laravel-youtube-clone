@@ -35,7 +35,7 @@ if (store.getters['user/isLoggedIn']) {
 
 //------ Components ------//
 
-Vue.component('app', require('./components/app').default)
+Vue.component('app', require('./components/App').default)
 Vue.component('channel-icon', require('./components/user/icon').default)
 
 window.app = new Vue({
