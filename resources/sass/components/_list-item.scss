@@ -1,6 +1,7 @@
 .list-item {
     float: left;
     width: 100%;
+    overflow: hidden;
 
     a {
         color: inherit;
@@ -48,21 +49,25 @@
 
     .item-details-wrapper {
         float: left;
+        width: 100%;
+        display: flex;
+        color: #444444;
     
         .channel-image {
             float: left;
             padding-right: 0.5rem;
-            width: 20%;
         }
 
         .item-details {
             float: left;
             width: 80%;
+            font-size: 0.9em;
 
             h2 {
                 font-size: 1.1em;
-                font-weight: 800;
-                margin-bottom: 5px;
+                font-weight: 700;
+                margin-bottom: 0.5rem;
+                color: #000000;
             }
         }
     }

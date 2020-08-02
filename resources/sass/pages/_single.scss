@@ -51,7 +51,10 @@
         }
 
         .item-details-wrapper {
+            float: initial;
             padding: 0 0 0 10px;
+            width: auto;
+            white-space: nowrap;
         }
     }
 

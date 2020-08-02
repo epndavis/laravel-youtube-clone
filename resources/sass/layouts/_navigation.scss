@@ -3,6 +3,9 @@
     width: 100%;
     display: flex;
     flex-direction: row;   
+    position: fixed;
+    top: 0;
+    z-index: 1;
     
     .left-nav {
         display: flex;
@@ -31,7 +34,7 @@
 
         .search-container {
             width: 100%;
-            max-width: 500px;
+            max-width: 690px;
             margin: auto;
             display: flex;
             flex-direction: row;
@@ -87,19 +90,6 @@
         .upload {
             float: left;
             padding: 0 1.5rem 0 1.5rem;
-        }
-
-        .account-nav {
-            float: left;
-            font-family: Sans-serif;
-            display: block;
-            border-radius: 100%;
-            background-color: #00887a;
-            height: 32px;
-            width: 32px;
-            text-align: center;
-            line-height: 32px;
-            color: #ffffff;
         }
     }
 }

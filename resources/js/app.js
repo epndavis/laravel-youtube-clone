@@ -30,7 +30,7 @@ const store = new Vuex.Store({
 //------ Components ------//
 
 Vue.component('app', require('./components/app').default)
-
+Vue.component('channel-icon', require('./components/user/icon').default)
 
 window.app = new Vue({
     el: '#app',  

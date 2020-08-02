@@ -47,4 +47,13 @@ class Video extends Model implements HasMedia
     public function user() {
         return $this->belongsTo(User::class, 'uploaded_by');
     }
+
+    public function shortViewCount($num) 
+    {
+        $units = ['', 'K', 'M', 'B', 'T'];
+        for ($i = 0; $num >= 1000; $i++) {
+            $num /= 1000;
+        }
+        return round($num, 1) . $units[$i];
+    }
 }
